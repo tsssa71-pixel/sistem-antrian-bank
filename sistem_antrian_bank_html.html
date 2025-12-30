@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistem Antrian Bank</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+        .container {
+            width: 500px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .output {
+            margin-top: 15px;
+            padding: 10px;
+            background: #eef;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Sistem Antrian Bank</h1>
+
+    <h3>Ambil Nomor Antrian</h3>
+    <input type="text" id="nama" placeholder="Nama Nasabah">
+    <select id="layanan">
+        <option value="Setoran">Setoran</option>
+        <option value="Tarikan">Tarikan</option>
+        <option value="Customer Service">Customer Service</option>
+    </select>
+    <button onclick="ambilNomor()">Ambil Nomor</button>
+
+    <h3>Menu</h3>
+    <button onclick="lihatAntrean()">Lihat Antrean</button>
+    <button onclick="panggilNasabah()">Panggil Nasabah</button>
+    <button onclick="resetAntrean()">Reset Antrean</button>
+
+    <div class="output" id="output"></div>
+</div>
+
+<script>
+    let antrean = [];
+    let nomorAkhir = 0;
+
+    function ambilNomor() {
+        const nama = document.getElementById('nama').value;
+        const layanan = document.getElementById('layanan').value;
+
+        if (nama === '') {
+            alert('Nama tidak boleh kosong!');
+            return;
+        }
+
+        nomorAkhir++;
+        const nasabah = {
+            nomor: nomorAkhir,
+            nama: nama,
+            layanan: layanan
+        };
+
+        antrean.push(nasabah);
+        document.getElementById('output').innerHTML =
+            `Nomor Antrian Anda: <b>${nasabah.nomor}</b><br>Silakan menunggu panggilan.`;
+
+        document.getElementById('nama').value = '';
+    }
+
+    function lihatAntrean() {
+        if (antrean.length === 0) {
+            document.getElementById('output').innerHTML = 'Tidak ada nasabah dalam antrean.';
+            return;
+        }
+
+        let teks = '<b>Daftar Antrean:</b><br>';
+        antrean.forEach(n => {
+            teks += `No: ${n.nomor} | Nama: ${n.nama} | Layanan: ${n.layanan}<br>`;
+        });
+        document.getElementById('output').innerHTML = teks;
+    }
+
+    function panggilNasabah() {
+        if (antrean.length === 0) {
+            document.getElementById('output').innerHTML = 'Tidak ada antrean yang bisa dipanggil.';
+            return;
+        }
+
+        const n = antrean.shift();
+        document.getElementById('output').innerHTML =
+            `<b>Nasabah Dipanggil</b><br>
+             Nomor: ${n.nomor}<br>
+             Nama: ${n.nama}<br>
+             Layanan: ${n.layanan}`;
+    }
+
+    function resetAntrean() {
+        antrean = [];
+        nomorAkhir = 0;
+        document.getElementById('output').innerHTML = 'Semua antrean telah direset.';
+    }
+</script>
+</body>
+</html>
